@@ -1,7 +1,7 @@
 export function items(state = [], action) {
     switch (action.type) {
         case 'ITEMS_FETCH_DATA_SUCCESS':
-            return sortData(action.items);
+            return groupParent(action.items);
         
         case 'ITEMS_FETCH_DATA_ERROR':
             return action.message;
@@ -11,49 +11,33 @@ export function items(state = [], action) {
     }
 }
 
-export function sortData(arr) {
-    let data = [];
+function groupBy(items, keyBy) {
+	return items.reduce((map, item) => {
+  	const key = item[keyBy];
+    
+    if (!map[key]) {
+    	map[key] = [];
+    }
+    
+    map[key].push(item);
+    return map;
+  }, {});
+}
 
-    arr.filter(item => {
-        if (item.parent_id == 0) {
-            data.push(item);
-        }
-        return data;
-    });
+function groupParent(items) {
+	items = items.map(item => ({ ...item }));
 
-    for (let i of data) {
-        i.children = [];
-        for (let j of arr) {
-            if (i.id == j.parent_id) {
-                i.children.push(j);
-            }
-        }
+  const groupedByParentId = groupBy(items, 'parent_id');
+
+  items.forEach(item => {
+  	const children = groupedByParentId[item.id];
+
+    if (!children) {
+    	return;
     }
 
-    for (let i of data) {
-        if (i.children.length === 0) {
-            delete i.children;
-        } else {
-            for (let j of i.children) {
-                j.children = [];
-                for (let k of arr) {
-                    if (j.id == k.parent_id) {
-                        j.children.push(k);
-                    }
-                }
-            }
-        }
-    }
+    item.children = children;
+  });
 
-    for (let i of data) {
-        if (i.hasOwnProperty('children')) {
-            for (let j of i.children) {
-                if (j.children.length === 0) {
-                    delete j.children;
-                }
-            }
-        }
-    }
-     
-    return data;
+  return items.filter(item => !item.parent_id);
 }
