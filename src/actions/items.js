@@ -5,12 +5,19 @@ export function itemsFetchDataSuccess(items) {
     };
 }
 
+export function itemsFetchDataError(message) {
+    return {
+        type: 'ITEMS_FETCH_DATA_ERROR',
+        message
+    };
+}
+
 export function itemsFetchData(url) {
     return (dispatch) => {
         fetch(url)
             .then((response) => {
                 if (!response.ok) {
-                    throw Error(response.statusText);
+                    dispatch(itemsFetchDataError(response.statusText));
                 }
 
                 return response;

@@ -6,17 +6,19 @@
   "scripts": {
     "build": "nwb build-react-app",
     "clean": "nwb clean-app",
-    "start": "nwb serve-react-app"
+    "start": "nwb serve-react-app",
+    "test": "nwb test-react",
+   "test:coverage": "nwb test-react --coverage"
   },
   "dependencies": {
-    "react": "^15.3.2",
+    "react": "^15.7.0",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
-    "nwb": "0.12.x"
+    "nwb": "0.25.2"
   },
   "author": "",
   "license": "MIT",

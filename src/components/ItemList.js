@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { itemsFetchData } from '../actions/items';
+import { Items } from './Items';
 
 class ItemList extends Component {
     componentDidMount() {
@@ -9,13 +10,11 @@ class ItemList extends Component {
 
     render() {
         return (
-            <ul>
-                {this.props.items.map((item) => (
-                    <li key={item.id}>
-                        {item.label}
-                    </li>
-                ))}
-            </ul>
+            <div>
+                {typeof this.props.items === 'string'
+                ? <p>{this.props.items}</p>
+                : <Items items={this.props.items}/>}
+            </div>
         );
     }
 }
